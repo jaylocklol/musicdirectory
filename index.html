@@ -41,34 +41,54 @@
     <!-- Each audio file will be listed here by JavaScript -->
 </div>
 
-<script>
-    // JavaScript to list audio files and set up players
+<!-- Include the music-metadata-browser library -->
+<script src="https://cdn.jsdelivr.net/npm/music-metadata-browser/dist/music-metadata-browser.min.js"></script>
 
-    // List of audio files manually added (you'll need to update this)
+<script>
+    // List of audio files (adjust file paths as needed)
     const musicFiles = [
-        { title: "FEX - Subways Of Your Mind", file: "music/youtube_JrY_k9xK3LM_audio.mp3" },
-        { title: "Dayeene - Is This Love?", file: "music/youtube_T7SM3cZmP3g_audio.mp3" },
-        { title: "Dress To Kill UK - Time Of My Life", file: "music/youtube_EV0dQVfys5c_audio.mp3" }
+        "music/song1.mp3",
+        "music/song2.mp3",
+        "music/song3.mp3"
     ];
 
     const musicList = document.getElementById('music-list');
 
-    // Create an audio player for each file
-    musicFiles.forEach(song => {
+    // Function to fetch and display metadata for each audio file
+    async function loadMetadata(fileUrl) {
         const container = document.createElement('div');
         container.className = 'audio-container';
 
-        const title = document.createElement('p');
-        title.textContent = song.title;
+        // Fetch metadata
+        try {
+            const response = await fetch(fileUrl);
+            const arrayBuffer = await response.arrayBuffer();
+            const metadata = await musicMetadata.parseBuffer(new Uint8Array(arrayBuffer), fileUrl);
 
-        const player = document.createElement('audio');
-        player.controls = true;
-        player.src = song.file;
+            // Extract metadata
+            const title = metadata.common.title || 'Unknown Title';
+            const artist = metadata.common.artist || 'Unknown Artist';
 
-        container.appendChild(title);
-        container.appendChild(player);
-        musicList.appendChild(container);
-    });
+            // Display title and artist
+            const titleElement = document.createElement('p');
+            titleElement.textContent = `${title} - ${artist}`;
+
+            // Audio player
+            const player = document.createElement('audio');
+            player.controls = true;
+            player.src = fileUrl;
+
+            // Append to container and then to music list
+            container.appendChild(titleElement);
+            container.appendChild(player);
+            musicList.appendChild(container);
+        } catch (error) {
+            console.error('Error fetching metadata:', error);
+        }
+    }
+
+    // Load metadata for each file in the list
+    musicFiles.forEach(fileUrl => loadMetadata(fileUrl));
 </script>
 
 </body>
