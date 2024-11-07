@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Directory</title>
+    <style>
+        /* CSS styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        #music-list {
+            margin-top: 20px;
+        }
+
+        .audio-container {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Music Directory</h1>
+
+<div id="music-list">
+    <!-- Each audio file will be listed here by JavaScript -->
+</div>
+
+<script>
+    // JavaScript to list audio files and set up players
+
+    // List of audio files manually added (you'll need to update this)
+    const musicFiles = [
+        { title: "FEX - Subways Of Your Mind", file: "music/youtube_JrY_k9xK3LM_audio.mp3" },
+        { title: "Dayeene - Is This Love?", file: "music/youtube_T7SM3cZmP3g_audio.mp3" },
+        { title: "Dress To Kill UK - Time Of My Life", file: "music/youtube_EV0dQVfys5c_audio.mp3" }
+    ];
+
+    const musicList = document.getElementById('music-list');
+
+    // Create an audio player for each file
+    musicFiles.forEach(song => {
+        const container = document.createElement('div');
+        container.className = 'audio-container';
+
+        const title = document.createElement('p');
+        title.textContent = song.title;
+
+        const player = document.createElement('audio');
+        player.controls = true;
+        player.src = song.file;
+
+        container.appendChild(title);
+        container.appendChild(player);
+        musicList.appendChild(container);
+    });
+</script>
+
+</body>
+</html>
