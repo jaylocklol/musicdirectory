@@ -41,54 +41,34 @@
     <!-- Each audio file will be listed here by JavaScript -->
 </div>
 
-<!-- Include the music-metadata-browser library -->
-<script src="https://cdn.jsdelivr.net/npm/music-metadata-browser/dist/music-metadata-browser.min.js"></script>
-
 <script>
-    // List of audio files (adjust file paths as needed)
+    // JavaScript to list audio files and set up players
+
+    // List of audio files manually added (you'll need to update this)
     const musicFiles = [
-        "music/youtube_T7SM3cZmP3g_audio.mp3",
-        "music/youtube_JrY_k9xK3LM_audio.mp3",
-        "music/youtube_EV0dQVfys5c_audio.mp3"
+        { title: "Song 1", file: "music/song1.mp3" },
+        { title: "Song 2", file: "music/song2.mp3" },
+        { title: "Song 3", file: "music/song3.mp3" }
     ];
 
     const musicList = document.getElementById('music-list');
 
-    // Function to fetch and display metadata for each audio file
-    async function loadMetadata(fileUrl) {
+    // Create an audio player for each file
+    musicFiles.forEach(song => {
         const container = document.createElement('div');
         container.className = 'audio-container';
 
-        // Fetch metadata
-        try {
-            const response = await fetch(fileUrl);
-            const arrayBuffer = await response.arrayBuffer();
-            const metadata = await musicMetadata.parseBuffer(new Uint8Array(arrayBuffer), fileUrl);
+        const title = document.createElement('p');
+        title.textContent = song.title;
 
-            // Extract metadata
-            const title = metadata.common.title || 'Unknown Title';
-            const artist = metadata.common.artist || 'Unknown Artist';
+        const player = document.createElement('audio');
+        player.controls = true;
+        player.src = song.file;
 
-            // Display title and artist
-            const titleElement = document.createElement('p');
-            titleElement.textContent = `${title} - ${artist}`;
-
-            // Audio player
-            const player = document.createElement('audio');
-            player.controls = true;
-            player.src = fileUrl;
-
-            // Append to container and then to music list
-            container.appendChild(titleElement);
-            container.appendChild(player);
-            musicList.appendChild(container);
-        } catch (error) {
-            console.error('Error fetching metadata:', error);
-        }
-    }
-
-    // Load metadata for each file in the list
-    musicFiles.forEach(fileUrl => loadMetadata(fileUrl));
+        container.appendChild(title);
+        container.appendChild(player);
+        musicList.appendChild(container);
+    });
 </script>
 
 </body>
